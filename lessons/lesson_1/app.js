@@ -3,7 +3,7 @@
 // module.exports = 'Hello NODE world!';
 
 
-//           імпорт файлу
+//                  імпорт файлу
 //           після require данні з фалу який імпортується описуються і запускаються
 const exportFile = require('./example/example')
 console.log(exportFile)
