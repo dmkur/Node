@@ -1,0 +1,3 @@
+Hello writeFile function 2
+Hello appendFile!
+Hello appendFile! 
