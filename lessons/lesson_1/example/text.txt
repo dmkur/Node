@@ -1,3 +1,4 @@
 Hello writeFile function 2
 Hello appendFile!
 Hello appendFile! 
+text data from promise 
