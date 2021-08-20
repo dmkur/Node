@@ -50,12 +50,39 @@ app.get(`/users`, (req, res) => {
     //в option - додаткові змінні, через кому, users - з bd наприклад
     // усе це прокидається у файл users.hbs  в HTML
     res.render(`users`, {userName: `Dima`, users})
+
+    //
+});
+
+//req.params
+app.get('/users/:user_id', (req, res) => {
+    // ':user_id' - параметр динамічної url
+    // його можна відловити через req.body
+    // наша url = http://localhost:5000/users/1
+    //console.log(req.params) //// пришле { user_id: '1' }
+    // данні змінні є передбачуваними тому, що ми їх очікуємо
+    // на відмінну від невідомих параметрів
+    const { user_id } = req.params;
+    const currentUser = users[user_id];
+
+    if(!currentUser) {
+        res.status(404).end('User not found')
+        return;
+    }
+    res.json(currentUser)
+
+    //  req.query - параметри які можуть | не можуть бути
+    // наша url = http://localhost:5000/users/1?name=Anton&gender=male&age=22
+    // все що після '?' попаде в req.query це і є динамічні параметри, які будуть або ні
+    // отримуємо - { name: 'Anton', gender: 'male', age: '22' }
+    console.log(req.query)
 });
 
 
 // через hbs login
 app.get(`/login`, (req, res) => {
-    res.render(`login`);
+    res.render(`login`, { isMale: false});
+    // isMale - змінна для прикладу з IF ELSE на login.hbs
 })
 
 app.post('/auth', (req, res) => {
