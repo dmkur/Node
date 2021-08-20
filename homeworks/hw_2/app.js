@@ -8,9 +8,42 @@
 //     При реєстрації юзер вводин логін та пороль і ви його данні дописуєте у файлик.
 //     Якщо такий мейл вже є, то видаємо помилку.
 //
-//     При логінації юзер так само ввоить мейл та пароль і вам необхідно знайти юзера в файлі. Якщо такий мейлик з таким паролем є, то привіти юзера на платформі показати інформацію про нього та кнопочку, яка перекине нас на список всіх юзерів.
+//     При логінації юзер так само ввоить мейл та пароль і вам необхідно знайти юзера в файлі.
+//     Якщо такий мейлик з таким паролем є, то привіти юзера на платформі показати інформацію про нього та кнопочку, яка перекине нас на список всіх юзерів.
 //     В інакшому випадку сказати, що необхідно реєструватись.
 //
 //     І відображення всіх юзерів це відповідно просто виведення списку вісх юзерів.
 //
 //     При реєстрації мейли не можуть повторюватись
+const express = require('express');
+const expressHbs = require('express-handlebars');
+const path = require('path');
+
+const users = require('./db/usersDB');
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.set('view engine', '.hbs');
+app.engine('.hbs', expressHbs({defaultLayout: false}));
+app.set('views', path.join(__dirname, 'static'));
+app.use(express.static(path.join(__dirname, 'static')));
+
+
+
+app.get('/users', (req, res) => {
+    res.render('users', {users});
+});
+
+
+app.get('/users/:user_id', (req, res) => {
+    res.end(`lol`)
+});
+
+
+
+app.listen('5000', ()=>{
+    console.log(`App listen 500`)
+});
