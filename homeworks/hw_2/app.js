@@ -32,18 +32,39 @@ app.set('views', path.join(__dirname, 'static'));
 app.use(express.static(path.join(__dirname, 'static')));
 
 
-
+//users
 app.get('/users', (req, res) => {
     res.render('users', {users});
 });
 
-
 app.get('/users/:user_id', (req, res) => {
-    res.end(`lol`)
+    const { user_id } = req.params;
+    const currentUser = users[user_id];
+    res.json(currentUser);
 });
 
 
 
+//login
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+
+
+// registration
+app.post('/registration', (req, res) => {
+    const { email, password } = req.body;
+    // console.log( req.body)
+    if (email === users.email) {
+
+    }
+});
+
+
+
+
+// app
 app.listen('5000', ()=>{
-    console.log(`App listen 500`)
+    console.log(`App listen 5000`)
 });
