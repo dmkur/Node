@@ -17,6 +17,7 @@
 //     При реєстрації мейли не можуть повторюватись
 const express = require('express');
 const expressHbs = require('express-handlebars');
+const fs = require('fs');
 const path = require('path');
 
 const users = require('./db/usersDB');
@@ -33,15 +34,26 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 
 //users
-app.get('/users', (req, res) => {
-    res.render('users', {users});
+// app.get('/users', (req, res) => {
+//     res.render('users', {users});
+// });
+//
+// app.get('/users/:user_id', (req, res) => {
+//     const { user_id } = req.params;
+//     const currentUser = users[user_id];
+//     res.json(currentUser);
+// });
+
+//registration
+app.get('/registration', (req, res) => {
+    res.render('registration')
 });
 
-app.get('/users/:user_id', (req, res) => {
-    const { user_id } = req.params;
-    const currentUser = users[user_id];
-    res.json(currentUser);
+app.post('/registration', (req, res) => {
+    const { email, password } = req.body;
+
 });
+
 
 
 
@@ -49,15 +61,14 @@ app.get('/users/:user_id', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
-
-
-
-// registration
-app.post('/registration', (req, res) => {
+// login post
+app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    // console.log( req.body)
-    if (email === users.email) {
-
+    for ( const userFromDB of users ) {
+        if (userFromDB.email === email && userFromDB.password === password) {
+            res.end('Welcome my friend');
+        }
+        res.end('User not found. Create your account, please');
     }
 });
 
@@ -67,4 +78,9 @@ app.post('/registration', (req, res) => {
 // app
 app.listen('5000', ()=>{
     console.log(`App listen 5000`)
+});
+
+const pathUsersBD = path.join(__dirname, 'db', 'usersDB.js')
+fs.appendFile(pathUsersBD, 'Lola', err => {
+    console.log(err)
 });
