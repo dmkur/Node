@@ -11,4 +11,4 @@ router.post('/', userControllers.createUser);
 router.get('/', userControllers.getAllUsers);
 router.get('/:user_id', userControllers.getSingleUser);
 
-module.exports = router;
+module.exports = router ;
