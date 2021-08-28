@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 // const fs = require('fs');
 // const path = require('path');
@@ -6,6 +7,9 @@ const express = require('express');
 const { PORT } = require('./config/variable');
 
 const app = express();
+
+// mongodb://localhost:27017 - стандарт, node-dmkur-2021 - назва бази
+mongoose.connect('mongodb://localhost:27017/node-dmkur-2021');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
