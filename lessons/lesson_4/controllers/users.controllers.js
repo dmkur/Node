@@ -1,19 +1,11 @@
-// const db = require('../db/users');
 const User = require('../dataBase/User-model');
-const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
-  getSingleUser: async (req, res, next) => {
+  getSingleUser: (req, res, next) => {
     try {
-      const { user_id } = req.params;
-
-      // звернення до реальної бази через findById
-      // є різні методи
-      const user = await User.findById(user_id);
-
-      if (!user) {
-        throw new ErrorHandler(418, 'User not FOUND _!');
-      }
+      // це праметри які ми прокинули з middleware isUserPresent
+      const { user, testParam } = req;
+      console.log(user, testParam);
 
       res.json(user);
     } catch (e) {
@@ -39,4 +31,14 @@ module.exports = {
       next(e);
     }
   },
+  deleteUser: async (req, res, next) => {
+    try {
+      const { user_id } = req.params;
+      await User.deleteOne({ _id: user_id });
+
+      res.status(204).json(`User id ${user_id} deleted`);
+    } catch (e) {
+      next(e);
+    }
+  }
 };
