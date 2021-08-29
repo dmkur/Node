@@ -1,3 +1,4 @@
+// Task
 // Вам потрібно реалізувати мінімум 3 строрінки.
 // 1) Реєстрація
 // 2) Логінація.
@@ -20,6 +21,7 @@
 const express = require('express');
 const expressHbs = require('express-handlebars');
 
+const fs = require('fs');
 const path = require('path');
 const usersDB = require('./db/usersDB');
 
@@ -55,16 +57,35 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const { password, email } = req.body;
   const userSearch = usersDB.find((value) => value.email === email && value.password === password);
-  console.log(usersDB.findIndex(email));
+  const index = usersDB.findIndex((value) => value.email === email);
 
   if (userSearch === undefined) {
     res.redirect('/registration');
   }
-  res.redirect('/users');
+  res.redirect(`/users/${index}`);
 });
 
 app.get('/registration', (req, res) => {
   res.render('registration');
+});
+
+app.post('/registration', (req, res) => {
+  const { email } = req.body;
+  const isEmailPresent = usersDB.find((item) => item.email === email);
+
+  if (isEmailPresent === undefined) {
+    usersDB.push(req.body);
+    const userPath = path.join(__dirname, 'db', 'usersDB.js');
+
+    fs.writeFile(userPath, `module.exports = ${JSON.stringify(usersDB)}`, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    res.redirect('/login');
+    return;
+  }
+  res.end(`Email ${email} is already exist`);
 });
 
 app.listen(5000, () => {
