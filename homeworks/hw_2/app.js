@@ -55,6 +55,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const { password, email } = req.body;
   const userSearch = usersDB.find((value) => value.email === email && value.password === password);
+  console.log(usersDB.findIndex(email));
 
   if (userSearch === undefined) {
     res.redirect('/registration');
