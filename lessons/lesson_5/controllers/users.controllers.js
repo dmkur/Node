@@ -1,14 +1,17 @@
 const User = require('../dataBase/User-model');
+const { userNormalizator } = require('../utils/user.util');
+const { passwordService } = require('../services');
 
 module.exports = {
   getSingleUser: (req, res, next) => {
     try {
       // це праметри які ми прокинули з middleware isUserPresent
-      // eslint-disable-next-line no-unused-vars
-      const { user, testParam } = req;
+      // const { user,testParam } = req;
       // console.log(user, testParam);
 
-      res.json(user);
+      const userToReturn = userNormalizator(req.user);
+
+      res.json(userToReturn);
     } catch (e) {
       next(e);
     }
@@ -23,11 +26,17 @@ module.exports = {
   },
   createUser: async (req, res, next) => {
     try {
-      // при створенні юзера, ми це робимл через body в postman
-      // данні повинні відповідати нашій моделі User
-      const createdUser = await User.create(req.body);
+      // дістаємо пароль
+      const { password } = req.body;
+      // хешуємо його через наш сервіс
+      const hashedPassword = await passwordService.hash(password);
+      // створюємо юзера, при цьому копіюємо body, та перезаписуємо пасворд
+      const createdUser = await User.create({ ...req.body, password: hashedPassword });
 
-      res.json(createdUser);
+      // функція, що зітре нам поле password, відповідно база його не верне
+      const userToReturn = userNormalizator(createdUser);
+
+      res.json(userToReturn);
     } catch (e) {
       next(e);
     }

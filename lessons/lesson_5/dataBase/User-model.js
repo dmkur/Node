@@ -19,6 +19,9 @@ const userSchema = new Schema({
     unique: true,
     required: true,
     trim: true
+    // 1йспосіб- опція що не вертає пароль від бази
+    // (іноді не працює, так як часом потрібно повернути пароль)
+    // select: false
   },
   email: {
     type: String,
