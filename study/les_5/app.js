@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const { MONGOOSE_CONNECT, PORT } = require('./configs/variables');
+const { userRouter } = require('./routes');
+// const { _generalErrorCapture, _notFoundError } = require('./errors/errors-fuctions');
 
 const app = express();
 
@@ -14,8 +16,9 @@ app.get('/ping', (req, res) => {
   res.json('Pong');
 });
 
-// eslint-disable-next-line no-undef
 app.use('/users', userRouter);
+// app.use('*', _notFoundError);
+// app.use(_generalErrorCapture);
 
 app.listen(PORT, () => {
   console.log('App listen', PORT);
