@@ -8,6 +8,8 @@ module.exports = {
     userToNormalize = userToNormalize.toJSON();
 
     fieldsToRemove.forEach((field) => delete userToNormalize[field]);
+
+    return userToNormalize;
   }
 
 };

@@ -1,5 +1,5 @@
 const CustomError = require('../errors/CustomError');
-const { createUserValidator } = require('../validators/user.validator');
+const { userValidator } = require('../validators');
 const User = require('../db/user-model.db');
 
 module.exports = {
@@ -20,12 +20,28 @@ module.exports = {
   },
   checkUserBody: (req, res, next) => {
     try {
-      const { error, value } = createUserValidator.validate(req.body);
+      const { error, value } = userValidator.createUserValidator.validate(req.body);
       console.log(value);
 
       if (error) {
         throw new CustomError(400, error.details[0].message);
       }
+      next();
+    } catch (e) {
+      next(e);
+    }
+  },
+  isUserPresent: async (req, res, next) => {
+    try {
+      const { user_id } = req.params;
+      const isUser = await User.findById(user_id);
+
+      if (!isUser) {
+        throw new CustomError(400, 'User not found:D');
+      }
+
+      req.user = isUser;
+
       next();
     } catch (e) {
       next(e);
