@@ -1,5 +1,6 @@
 const User = require('../dataBase/User-model');
 const ErrorHandler = require('../errors/ErrorHandler');
+const { ADMIN } = require('../config/users-roles.enum');
 const { userValidator } = require('../validators');
 
 module.exports = {
@@ -75,4 +76,40 @@ module.exports = {
       next(e);
     }
   },
+
+  checkIsAdminMIddleware: (req, res, next) => {
+    try {
+      const { role } = req.user;
+
+      if (!role === ADMIN) {
+        throw new ErrorHandler(403, 'Only for admins');
+      }
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  // динамічна перевірка ролі, де при виклику ми вказуємо параметр перевірки
+  // виклик - checkIsUSerRoleMIddleware(['admin']) - тобто досьуп лише в адміна
+
+  checkIsUSerRoleMIddleware: (rolesArr = []) => (req, res, next) => {
+    try {
+      const { role } = req.user;
+
+      // якщо в масив пустий ідемо далі, тобто доступ мають усі якщо
+      // запис наступний checkIsUSerRoleMIddleware([])
+      if (!rolesArr.length) {
+        return next();
+      }
+
+      // якщо масив не містить ролі, помилку вибиваємо
+      // тобто виклтк checkIsUSerRoleMIddleware(['admin']) доступ лише адміну
+      // а в нас просто юзер  - помилка
+      if (!rolesArr.includes(role)) {
+        throw new ErrorHandler(403, 'Only for admins');
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
 };
