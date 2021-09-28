@@ -44,6 +44,10 @@ module.exports = {
 
   checkUniqueEmail: async (req, res, next) => {
     try {
+      console.log('**********************************');
+      console.log(req.user);
+      console.log('**********************************');
+
       const { email } = req.body;
 
       const userByEmail = await User.findOne({ email });
@@ -108,6 +112,24 @@ module.exports = {
       if (!rolesArr.includes(role)) {
         throw new ErrorHandler(403, 'Only for admins');
       }
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  getUserByDynemicParam: (paramName, searchIn = 'body', dbField = paramName) => async (req, res, next) => {
+    try {
+      const value = req[searchIn][paramName];
+
+      const user = await User.findOne({ [dbField]: value });
+
+      if (!user) {
+        throw new ErrorHandler(418, 'User not found');
+      }
+
+      req.user = user;
+
+      next();
     } catch (e) {
       next(e);
     }
