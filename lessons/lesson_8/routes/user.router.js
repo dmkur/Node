@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const {
-  // eslint-disable-next-line no-unused-vars
   isUserPresent, isUserNotPresent, validateUserBody, checkIsUserRoleMiddleware, getUserByDynemicParam
 } = require('../middlewares/user.middleware');
 
@@ -25,7 +24,7 @@ router.delete('/:user_id',
   validateAccessToken,
   getUserByDynemicParam('user_id', 'params', '_id'),
   isUserNotPresent,
-  // checkIsUserRoleMiddleware(['user']),
+  checkIsUserRoleMiddleware(['user']),
   userControllers.deleteUser);
 
 module.exports = router;
