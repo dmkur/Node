@@ -1,4 +1,5 @@
 const User = require('../dataBase/User-model');
+const { emailActionsENUM } = require('../config');
 const { userNormalizator } = require('../utils/user.util');
 const { passwordService, emailService } = require('../services');
 
@@ -7,7 +8,11 @@ module.exports = {
     try {
       const userToReturn = userNormalizator(req.user);
 
-      await emailService.sendMail('fgameua@gmal.com');
+      await emailService.sendMail(
+        'dmytrokurdelchuk@gmail.com',
+        emailActionsENUM.WELCOME,
+        { userName: req.user.name }
+      );
 
       res.json(userToReturn);
     } catch (e) {

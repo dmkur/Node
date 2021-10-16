@@ -5,6 +5,8 @@ module.exports = {
   ACCESS_SECRET_KEY: process.env.ACCESS_SECRET_KEY || 'Secret',
   REFRESH_SECRET_KEY: process.env.REFRESH_SECRET_KEY || 'S_2',
 
-  NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'test@gmail.com',
-  NO_REPLY_EMAIL_PASS: process.env.NO_REPLY_EMAIL_PASS || '123',
+  NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'dmytrokurdelchuk@gmail.com',
+  NO_REPLY_EMAIL_PASS: process.env.NO_REPLY_EMAIL_PASS || 'dmkur_2021UA',
+
+  frontEndURL: process.env.frontEndURL || 'https://www.google.com'
 };
