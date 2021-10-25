@@ -9,5 +9,9 @@ module.exports = {
   [emailActionsENUM.USER_BLOCKED_ADMIN]: {
     templateName: 'blocked by admin',
     subject: 'lol your acc was blocked'
+  },
+  [emailActionsENUM.FORGOT_PASSWORD]: {
+    templateName: 'forgot password',
+    subject: 'dont worry'
   }
 };

@@ -9,6 +9,8 @@ const girlValidator = Joi.object({
   age: Joi.number().min(18).max(100)
 });
 
+const passwordSchema = Joi.string().regex(PASSWORD_REGEXP).required();
+
 // модель та валідатор повинні співпадати
 // в даному випадку лишні вимоги для прикладу Joi
 const createUserValidator = Joi.object({
@@ -17,7 +19,7 @@ const createUserValidator = Joi.object({
 
   // мило і пароль стрінга і одразу перевіряється по регулярному виразу
   email: Joi.string().lowercase().regex(EMAIL_REGEXP).required(),
-  password: Joi.string().regex(PASSWORD_REGEXP).required(),
+  password: passwordSchema,
 
   // вік, де CURRENT_YEAR, це поточний рік відповідно від 6 до 120 років
   born_year: Joi.number().min(CURRENT_YEAR - 120).max(CURRENT_YEAR - 6),
@@ -53,7 +55,12 @@ const updateUserValidator = Joi.object({
 
 });
 
+const passwordValidator = Joi.object({
+  password: passwordSchema
+});
+
 module.exports = {
   createUserValidator,
-  updateUserValidator
+  updateUserValidator,
+  passwordValidator
 };

@@ -17,6 +17,7 @@ module.exports = {
       next(e);
     }
   },
+
   isUserPresent: (req, res, next) => {
     try {
       const { user } = req;
@@ -33,8 +34,8 @@ module.exports = {
 
   validateUserBody: (req, res, next) => {
     try {
-      // eslint-disable-next-line no-unused-vars
       const { error, value } = userValidator.createUserValidator.validate(req.body);
+      req.body = value;
 
       if (error) {
         throw new ErrorHandler(400, error.details[0].message);
@@ -88,6 +89,21 @@ module.exports = {
       const user = await User.findOne({ [dbField]: value });
 
       req.user = user;
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  validateNewPassword: (req, res, next) => {
+    try {
+      const { error, value } = userValidator.passwordValidator.validate(req.body);
+      req.body = value;
+
+      if (error) {
+        throw new ErrorHandler(400, error.details[0].message);
+      }
 
       next();
     } catch (e) {
