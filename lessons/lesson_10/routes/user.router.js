@@ -1,14 +1,20 @@
 const router = require('express').Router();
 const {
-  isUserPresent, isUserNotPresent, validateUserBody, checkIsUserRoleMiddleware, getUserByDynemicParam
+  isUserPresent,
+  isUserNotPresent,
+  validateUserBody,
+  checkIsUserRoleMiddleware,
+  getUserByDynemicParam,
 } = require('../middlewares/user.middleware');
 
 const { validateAccessToken } = require('../middlewares/auth.middleware');
+const { fileMiddlaware } = require('../middlewares');
 
 const { userControllers } = require('../controllers');
 
 router.post('/',
   validateUserBody,
+  fileMiddlaware.checkAvatar,
   getUserByDynemicParam('email'),
   isUserPresent,
   userControllers.createUser);
