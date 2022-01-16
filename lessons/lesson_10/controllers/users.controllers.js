@@ -47,13 +47,31 @@ module.exports = {
   // },
   createUser: async (req, res, next) => {
     try {
-      console.log(req.files);
+      const { password } = req.body;
 
-      const uploadInfo = await s3Service.uploadFile(req.files.avatar, 'users', 'ssssa');
+      const hashedPassword = await passwordService.hash(password);
 
-      console.log(uploadInfo);
+      // створили юзера, йому присвоївся id
+      let createdUser = await User.create({ ...req.body, password: hashedPassword });
 
-      res.json({});
+      // перевіряємо чи є файли типу фото
+      if (req.files && req.files.avatar) {
+        // загружаємо фото до юзера
+        // при загружанні створюємо назву фото з id юзера
+        const s3Response = await s3Service.uploadFile(req.files.avatar, 'users', createdUser._id);
+
+        // перезаписуємо нашого юзера
+        // знаходимо по id додоаємо поле avatar, повертаємо нового юзера
+        createdUser = await User.findByIdAndUpdate(
+          createdUser._id,
+          { avatar: s3Response.Location },
+          { new: true }
+        );
+      }
+
+      const userToReturn = userNormalizator(createdUser);
+
+      res.json(userToReturn);
     } catch (e) {
       next(e);
     }

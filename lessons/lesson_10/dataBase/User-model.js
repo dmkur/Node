@@ -35,6 +35,9 @@ const userSchema = new Schema({
     default: userRolesEnum.USER, // значення за замовчуванням
     // поле можливих значення ролів(admins & users)
     enum: Object.values(userRolesEnum) // Object.values = візьме усі ключі
+  },
+  avatar: {
+    type: String
   }
 }, { timestamps: true });
 // timestamps: true допише два поля дата створення, дата оновлення

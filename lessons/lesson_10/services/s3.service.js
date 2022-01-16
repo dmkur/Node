@@ -25,7 +25,9 @@ module.exports = {
     // може перетерти як з бд
     const { data, mimetype, name } = file;
 
-    const fileName = _fileNameBuilder(name, itemType, itemId);
+    // використали для itemId перетворення в стрінгу
+    // оск в монго id це об'єкт
+    const fileName = _fileNameBuilder(name, itemType, itemId.toString());
 
     return bucket
       .upload({
